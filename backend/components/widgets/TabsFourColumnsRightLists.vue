@@ -1,0 +1,398 @@
+<template>
+  <div>
+    <!-- Heading Section -->
+    <div v-if="title" class="grid grid-cols-9 gap-4 my-4 py-2 px-2 border-y-2 border-zinc-600">
+      <div class="col-start-1 col-end-3">
+        <a
+          href="#"
+          class="font-normal text-black text-2xl font-sans"
+          v-text="title"
+        >
+        </a>
+      </div>
+      <div class="col-start-3 col-end-9 lg:block hidden">
+        <ul
+          class="flex flex-wrap -mb-px text-sm font-medium text-center leading-8 justify-center"
+        >
+        <!-- {{ tags }} -->
+
+          <li class="mr-2 active" role="presentation">
+            <button
+              class="active inline-block px-2 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 font-sans text-sm"
+
+              aria-selected="true"
+            >
+              সকল
+            </button>
+          </li>
+          <li v-for="(tag, i) in tag_names" :key="i" class="mr-2" role="presentation">
+
+            <button
+              class="inline-block px-2 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 font-sans text-sm"
+
+              aria-selected="false"
+              v-text="tag.title"
+            >
+            </button>
+          </li>
+
+        </ul>
+      </div>
+      <div class="col-end-13 col-span-3 lg:block hidden">
+        <a
+          href="#"
+          class="text-gray-800 text-sm font-medium inline-flex items-center rounded mr-2"
+        >
+          <span class="pr-2"> আরও পড়ুন </span>
+
+          <svg
+            version="1.1"
+            id="Capa_1"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            x="0px"
+            y="0px"
+            width="18px"
+            height="18px"
+            viewBox="0 0 93.934 93.934"
+            style="enable-background: new 0 0 93.934 93.934"
+            xml:space="preserve"
+          >
+              <g>
+                <path
+                  d="M46.967,0C21.029,0,0,21.028,0,46.967c0,25.939,21.029,46.967,46.967,46.967c25.939,0,46.967-21.027,46.967-46.967
+									C93.934,21.027,72.906,0,46.967,0z M55.953,66.295V54.301H18.652V39.633h37.303V27.639l19.326,19.328L55.953,66.295z"
+                />
+              </g>
+            <g></g>
+            <g></g>
+            <g></g>
+            <g></g>
+            <g></g>
+            <g></g>
+            <g></g>
+            <g></g>
+            <g></g>
+            <g></g>
+            <g></g>
+            <g></g>
+            <g></g>
+            <g></g>
+            <g></g>
+            </svg>
+        </a>
+      </div>
+    </div>
+    <div>
+      <!-- Content Section -->
+      <div class="grid grid-cols-12 gap-2 py-4">
+        <div v-if="this.postsLoaded !== null" class="lg:col-span-8 col-span-12">
+          <div class="grid grid-cols-12 gap-1">
+            <div v-for="(post, i) in postsLoaded" :key="i" v-if="i >= 0 && i <= 3" class="lg:col-span-6 col-span-12">
+              <div class="relative overflow-hidden cursor-pointer">
+                <nuxt-link :to="{name: 'slug', params: {slug:decodeURIComponent(post.slug)}}">
+                  <img
+                    class="object-cover w-full h-auto"
+                    :src="getImageSrc(post.pictures[0].thumbnail)"
+                    alt=""
+                  />
+                  <div class="absolute inset-x-0 bottom-0 px-6 bg-gradient-to-t from-black">
+                    <h5 v-if="widget_settings.show_title == 1" v-text="post.title"
+                        class="mb-2 text-lg font-medium tracking-tight text-white line-clamp-2 font-sans">
+                    </h5>
+                  </div>
+                </nuxt-link>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div v-else class="lg:col-span-8 col-span-12">
+          <div class="grid grid-cols-12 gap-1">
+            <div v-for="(n,i) in 4"
+                 :key="n" class="col-span-12 lg:col-span-6">
+              <div class="border border-blue-300 shadow rounded-md p-4 max-w-sm w-full mx-auto">
+                <div class="animate-pulse flex space-x-4">
+                  <div class="rounded-full bg-slate-200 h-10 w-10"></div>
+                  <div class="flex-1 space-y-6 py-1">
+                    <div class="h-2 bg-slate-200 rounded"></div>
+                    <div class="space-y-3">
+                      <div class="grid grid-cols-3 gap-4">
+                        <div class="h-2 bg-slate-200 rounded col-span-2"></div>
+                        <div class="h-2 bg-slate-200 rounded col-span-1"></div>
+                      </div>
+                      <div class="h-2 bg-slate-200 rounded"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div v-if="this.postsLoaded !== null" class="lg:col-span-4 col-span-12">
+          <div
+            class="grid grid-cols-12 gap-1 divide-y divide-zinc-300 max-h-96 overflow-y-scroll"
+          >
+            <div v-for="(post, i) in postsLoaded" :key="i" v-if="i >= 4 && i <= 10" class="col-span-12 py-2">
+              <NuxtLink :to="{name: 'slug', params: {slug:decodeURIComponent(post.slug)}}" class="flex flex-row items-center md:flex-row md:max-w-xl">
+                <img
+                  v-if="post.pictures[0].thumbnail !== undefined"
+                  class="object-cover w-auto h-14 md:h-auto md:w-24"
+                  :src="getImageSrc(post.pictures[0].thumbnail)"
+                  alt=""
+                />
+                <div class="flex flex-col justify-between px-2 leading-normal">
+                  <h5 v-if="widget_settings.show_title == 1" v-text="post.title" class="text-sm font-medium tracking-tight text-black hover:text-red-700 line-clamp-2 font-sans" v-html="post.title">
+                  </h5>
+                  <p v-if="widget_settings.show_excerpt == 1" v-text="post.short_description" class="font-normal text-xs text-black dark:text-gray-400 line-clamp-3 font-sans" v-html="post.short_description">
+                  </p>
+                </div>
+              </NuxtLink>
+            </div>
+          </div>
+        </div>
+        <div v-else class="lg:col-span-4 col-span-12">
+          <div class="grid grid-cols-12 gap-1 divide-y divide-zinc-300 max-h-96 overflow-y-scroll">
+            <div v-for="(n,i) in 5"
+                 :key="n" class="col-span-12 py-2">
+              <div class="border border-blue-300 shadow rounded-md p-4 max-w-sm w-full mx-auto">
+                <div class="animate-pulse flex space-x-4">
+                  <div class="rounded-full bg-slate-200 h-10 w-10"></div>
+                  <div class="flex-1 space-y-6 py-1">
+                    <div class="h-2 bg-slate-200 rounded"></div>
+                    <div class="space-y-3">
+                      <div class="grid grid-cols-3 gap-4">
+                        <div class="h-2 bg-slate-200 rounded col-span-2"></div>
+                        <div class="h-2 bg-slate-200 rounded col-span-1"></div>
+                      </div>
+                      <div class="h-2 bg-slate-200 rounded"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div>
+        <!-- Content Section -->
+        <div class="grid grid-cols-12 gap-2 py-4">
+          <div class="lg:col-span-8 col-span-12">
+            <div class="grid grid-cols-12 gap-1">
+              <div v-for="(post, i) in tags" :key="i" v-if="i >= 0 && i <= 3" class="lg:col-span-6 col-span-12">
+                <div class="relative overflow-hidden cursor-pointer">
+                  <nuxt-link :to="{name: 'slug', params: {slug:decodeURIComponent(post.slug)}}">
+                    <img
+                      class="object-cover w-full h-auto"
+                      :src="getImageSrc(post.pictures[0].thumbnail)"
+                      alt=""
+                    />
+                    <div class="absolute inset-x-0 bottom-0 px-6 bg-gradient-to-t from-black">
+                      <h5 v-if="widget_settings.show_title == 1" v-text="post.title"
+                          class="mb-2 text-lg font-medium tracking-tight text-white line-clamp-2 font-sans">
+                      </h5>
+                    </div>
+                  </nuxt-link>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="lg:col-span-4 col-span-12">
+            <div class="grid grid-cols-12 gap-1 divide-y divide-zinc-300 max-h-96 overflow-y-scroll">
+              <div v-for="(post, i) in tags" :key="i" v-if="i >= 4 && i <= 10" class="col-span-12 py-2">
+                <NuxtLink :to="{name: 'slug', params: {slug:decodeURIComponent(post.slug)}}" class="flex flex-row items-center md:flex-row md:max-w-xl">
+                  <img
+                    v-if="post.pictures[0].thumbnail !== undefined"
+                    class="object-cover w-auto h-14 md:h-auto md:w-24"
+                    :src="getImageSrc(post.pictures[0].thumbnail)"
+                    alt=""
+                  />
+                  <div class="flex flex-col justify-between px-2 leading-normal">
+                    <h5 v-if="widget_settings.show_title == 1" v-text="post.title" class="text-sm font-medium tracking-tight text-black hover:text-red-700 line-clamp-2 font-sans" v-html="post.title">
+                    </h5>
+                    <p v-if="widget_settings.show_excerpt == 1" v-text="post.short_description" class="font-normal text-xs text-black dark:text-gray-400 line-clamp-3 font-sans" v-html="post.short_description">
+                    </p>
+                  </div>
+                </NuxtLink>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</template>
+<script>
+import qs from "qs";
+
+export default {
+
+  name: "pink-tabs",
+  props: [
+    // camelCase in JavaScript
+    'title',
+    'url',
+    'widget_settings',
+    'data_limit',
+    'taxonomy',
+    'category_taxonomy',
+    'data',
+    'page',
+    'posts',
+  ],
+  components: {
+    // Create a new component that
+    // extends v-skeleton-loader
+    VBoilerplate: {
+      functional: true,
+
+      render (h, { data, props, children }) {
+        return h('v-skeleton-loader', {
+          ...data,
+          props: {
+            boilerplate: true,
+            elevation: 2,
+            ...props,
+          },
+        }, children)
+      },
+    },
+  },
+  data() {
+    return {
+      openTab: 1,
+      loading: true,
+      loaded: false,
+      postsLoaded: null,
+      postCount: 0,
+      tag_slugs: [],
+      tags: null,
+      tag_names: null,
+      show: false,
+      isActive: true,
+      selected: false,
+      tag_ids: []
+    };
+  },
+  methods: {
+    // toggleTabs: function (tabNumber) {
+    //   this.openTab = tabNumber;
+    // },
+    getPosts() {
+      if (this.widget_settings.category_taxonomy == 'null') {
+        this.loading = false;
+        this.loaded = true;
+        this.postCount = this.posts.data.length;
+        this.postsLoaded = this.posts.data;
+      } else {
+        let category_ids;
+        if(this.widget_settings) {
+          if(this.widget_settings.category_taxonomy === 'category') {
+            category_ids = this.widget_settings.cat_data.split(',');
+          }
+        }
+        // console.log(category_ids);
+        this.$axios
+          .get(
+            this.url ? this.url : '/frontend/category-posts/' + category_ids, {
+              // params: {
+                // per_page: this.data_limit === 'null' ? 10 : this.data_limit,
+                // page: this.page,
+              // },
+              // paramsSerializer: params => {
+              //   return qs.stringify(params)
+              // }
+            }
+          )
+          .then(response => {
+            this.postsLoaded = response.data.data;
+            // console.log(this.postsLoaded);
+            /*.reduce(function (res, current, index, array) {
+            return res.concat([current, current]);
+          }, []);*/
+            // console.log(this.postsLoaded);
+            this.loading = false;
+            this.loaded = true;
+            this.postCount = response.data.data.length;
+          });
+      }
+    },
+    getTagPosts(){
+      // 
+      if (this.widget_settings.taxonomy == 'null') {
+        this.loading = false;
+        this.loaded = true;
+        this.postCount = this.posts.data.length;
+        this.postsLoaded = this.posts.data;
+      } else {
+        let tag_ids;
+        if(this.widget_settings) {
+          if(this.widget_settings.taxonomy === 'tag') {
+            tag_ids = this.widget_settings.data.split(',');
+          }
+        }
+        
+        this.$axios
+        .get(
+          this.url ? this.url : '/frontend/tag-posts/'+ tag_ids[1], {
+            // params: {
+            //   tag_slugs: tag_slugs,
+            //   per_page: this.data_limit === 'null' ? 10 : this.data_limit,
+            //   page: this.page,
+            // },
+            // paramsSerializer: params => {
+            //   return qs.stringify(params);
+            // }
+          }
+        )
+        .then(response => {
+          this.tags = response.data.data;
+          console.log(this.tags);
+          this.loading = false;
+          this.loaded = true;
+        });
+      }
+      
+    },
+    getTags(){
+
+      this.$axios
+        .get(
+          this.url ? this.url : '/frontend/tags')
+        .then(response => {
+          this.tag_names = response.data.activeTag;
+          // console.log(this.tag_names);
+        });
+    },
+    findThumbSrc(post) {
+      let img = post.media_sizes && post.media_sizes.file;
+      if (img == null) {
+        return '/assets/logo-square.svg';
+      }
+      let thumb = post.media_sizes.sizes && post.media_sizes.sizes.thumbnail && post.media_sizes.sizes.thumbnail.file;
+      let urlparts = post.image.split('/');
+      urlparts.pop();
+      return urlparts.join('/') + '/' + thumb;
+    },
+    getImageSrc(src) {
+      if (/^(?:[a-z]+:)?\/\//i.test(src)) {
+        return src;
+      }
+      return this.$config.apiBaseURL + '/storage' + src;
+    }
+  },
+  mounted() {
+    this.getPosts(1);
+    this.getTagPosts();
+    this.getTags();
+    // if (window.location.hash === '' ) {
+    //   this.openTab[0].isActive = true;
+    // }
+    // this.isActive = this.selected;
+  },
+
+};
+</script>

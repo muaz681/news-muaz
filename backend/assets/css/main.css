@@ -1,0 +1,130 @@
+.font-sans{
+  font-family: Arial,voice,Sans-Serif !important;
+}
+.min-h-45{
+  min-height: 44px;
+}
+.h-178{
+  height: 78rem;
+}
+.menu-scroll::-webkit-scrollbar {
+  height: 2px;
+  z-index: 99999;
+  /* background: #fff; */
+  width: 7px;
+}
+.menu-scroll::-webkit-scrollbar-thumb {
+  background-color: #981116;
+  border-radius: 0px;
+  border: 3px solid #981116;
+}
+.menu-scroll::-webkit-scrollbar-track {
+  background: #d9d4d4;
+}
+.tag-scroll::-webkit-scrollbar {
+  height: 2px;
+  z-index: 99999;
+  /* background: #fff; */
+}
+.tag-scroll::-webkit-scrollbar-thumb {
+  background-color: #981116;
+  border-radius: 0px;
+  border: 3px solid #981116;
+}
+.tag-scroll::-webkit-scrollbar-track {
+  background: #d9d4d4;
+}
+/* Marquee css */
+
+.slider {
+  height: 60px;
+  position: relative;
+  width: 100%;
+
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+.slider::before,
+.slider::after{
+  position:absolute;
+  background-image:linear-gradient(to right,rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%);
+  content:'';
+  height:100%;width:25%;
+  z-index:2;pointer-events:none;
+}
+.slider::before{
+  left:0;
+  top:0;
+}
+.slider::after{
+  right:0;
+  top:0;
+  transform:rotateZ(180deg);
+}
+
+/*  IMPORTANT CODE BELOW */
+
+.slide-track {
+  width: calc(150px * 18);
+  /* width: auto; */
+  display: flex;
+  animation: scroll 20s linear infinite;
+  justify-content: space-between;
+}
+
+.slide {
+  width: 25%;
+  height: 60px;
+
+  display: grid;
+  place-items: center;
+  transition:0.5s;
+  cursor:pointer;
+}
+.slide:hover{
+  transform:scale(0.8);
+  -moz-animation-play-state: paused;
+  -webkit-animation-play-state: paused;
+  animation-play-state: paused;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0px);
+  }
+  100% {
+    transform: translateX(calc(-150px * 10));
+  }
+}
+
+
+@media screen and (max-width: 768px) {
+  .slide-track {
+    width: calc(80px * 20);
+  }
+
+  .slide-track2 {
+    width: calc(80px * 15);
+  }
+
+  .slide {
+    width: 80px;
+  }
+
+  @keyframes scroll {
+    0% {
+      transform: translateX(0px);
+    }
+    100% {
+      transform: translateX(calc(-80px * 10));
+    }
+  }
+}
+
+/* Marquee css end */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+$body-font-family: Arial, "voice", Sans-Serif;
+$heading-font-family: Arial, "voice", Sans-Serif;
